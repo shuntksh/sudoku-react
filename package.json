@@ -5,6 +5,8 @@
 	"type": "module",
 	"license": "MIT",
 	"scripts": {
+		"format": "biome format --write .",
+		"lint": "biome lint --write .",
 		"dev": "vite",
 		"build": "vite build",
 		"preview": "vite preview"

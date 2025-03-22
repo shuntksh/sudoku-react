@@ -111,7 +111,6 @@ function App() {
 			{/* Overlay for closing menu on click outside */}
 			{menuOpen && (
 				<div
-
 					className="fixed inset-0 bg-black bg-opacity-50 z-40"
 					onClick={() => setMenuOpen(false)}
 					onKeyDown={(e) => {

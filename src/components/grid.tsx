@@ -16,7 +16,7 @@ function SudokuGrid({
 }: SudokuGridProps) {
 	// Create cell elements directly without using array map
 	const cellElements = [];
-	
+
 	for (let r = 0; r < 9; r++) {
 		for (let c = 0; c < 9; c++) {
 			cellElements.push(
@@ -27,7 +27,7 @@ function SudokuGrid({
 					isSelected={selectedCell?.row === r && selectedCell?.col === c}
 					onClick={() => onCellClick(r, c)}
 					className={getCellClass(r, c)}
-				/>
+				/>,
 			);
 		}
 	}
