@@ -1,24 +1,26 @@
 {
-  "name": "bun-react-template",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "main": "src/index.tsx",
-  "module": "src/index.tsx",
-  "scripts": {
-    "dev": "bun --hot src/index.html",
-    "start": "NODE_ENV=production bun src/index.html",
-    "build": "bun run index.html"
-  },
-  "dependencies": {
-    "bun-plugin-tailwind": "^0.0.14",
-    "react": "^19",
-    "react-dom": "^19",
-    "tailwindcss": "^4.0.6"
-  },
-  "devDependencies": {
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@types/bun": "latest"
-  }
+	"name": "bun-react-template",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"license": "MIT",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"react": "19.0.0",
+		"react-dom": "19.0.0",
+		"tailwindcss": "4.0.15"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@tailwindcss/vite": "4.0.15",
+		"@types/bun": "1.2.5",
+		"@types/react": "19.0.12",
+		"@types/react-dom": "19.0.4",
+		"@vitejs/plugin-react": "4.3.4",
+		"vite": "6.2.2"
+	}
 }

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback } from "react";
 
 function useLocalStorage() {
   const save = useCallback((key: string, data: unknown) => {
@@ -7,7 +7,7 @@ function useLocalStorage() {
 
   const load = useCallback(<T>(key: string): T | null => {
     const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) as T : null;
+    return data ? (JSON.parse(data) as T) : null;
   }, []);
 
   return { save, load };

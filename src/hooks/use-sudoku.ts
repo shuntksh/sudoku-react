@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Grid, generateGrid, removeNumbers } from '../game/sudoku';
+import { useState } from "react";
+import { type Grid, generateGrid, removeNumbers } from "../game/sudoku";
 
-type GameStatus = 'playing' | 'solved';
+type GameStatus = "playing" | "solved";
 
 export interface SudokuState {
   puzzle: Grid;
@@ -22,12 +22,12 @@ function useSudoku(initialState?: SudokuState) {
   function generateNewGame(difficulty: number): SudokuState {
     const solution = generateGrid();
     const puzzle = removeNumbers(solution, difficulty);
-    const grid = puzzle.map(row => [...row]);
+    const grid = puzzle.map((row) => [...row]);
     return {
       puzzle,
       grid,
       solution,
-      status: 'playing',
+      status: "playing",
       startTime: Date.now(),
       difficulty,
       selectedCell: null,

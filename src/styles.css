@@ -2,55 +2,55 @@
 
 /* Custom styles for iOS-like look and feel */
 body {
-  background-color: #F2F2F7;
+	background-color: #f2f2f7;
 }
 
 h1 {
-  color: #007AFF;
+	color: #007aff;
 }
 
 .grid {
-  background-color: #FFFFFF;
-  border-radius: 8px;
-  padding: 4px;
+	background-color: #ffffff;
+	border-radius: 8px;
+	padding: 4px;
 }
 
 .border-gray-300 {
-  border-color: #8E8E93;
+	border-color: #8e8e93;
 }
 
 .border-t-2.border-t-gray-500,
 .border-l-2.border-l-gray-500,
 .border-b-2.border-b-gray-500,
 .border-r-2.border-r-gray-500 {
-  border-color: #8E8E93;
+	border-color: #8e8e93;
 }
 
 .text-gray-800 {
-  color: #1C2526;
+	color: #1c2526;
 }
 
 .text-blue-600 {
-  color: #007AFF;
+	color: #007aff;
 }
 
 .bg-blue-100 {
-  background-color: #CCE5FF;
+	background-color: #cce5ff;
 }
 
 .text-gray-500 {
-  color: #8E8E93;
+	color: #8e8e93;
 }
 
 .text-gray-700 {
-  color: #1C2526;
+	color: #1c2526;
 }
 
 /* Timer styles */
 .text-xl.font-mono.bg-gray-100 {
-  background-color: #FFFFFF;
-  color: #1C2526;
-  border-radius: 8px;
-  padding: 8px 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background-color: #ffffff;
+	color: #1c2526;
+	border-radius: 8px;
+	padding: 8px 12px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }

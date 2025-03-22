@@ -8,7 +8,7 @@ export function generateGrid(): Grid {
 
 export function removeNumbers(grid: Grid, difficulty: number): Grid {
   const cellsToRemove = Math.min(Math.max(20 + (difficulty - 1) * 10, 20), 60); // 20 to 60 cells
-  const puzzle = grid.map(row => [...row]);
+  const puzzle = grid.map((row) => [...row]);
   let removed = 0;
   while (removed < cellsToRemove) {
     const row = Math.floor(Math.random() * 9);
