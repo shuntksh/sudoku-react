@@ -9,7 +9,7 @@ export function generateGrid(): Grid {
 export function removeNumbers(grid: Grid, difficulty: number): Grid {
 	const cellsToRemove = Math.min(Math.max(20 + (difficulty - 1) * 10, 20), 60); // 20, 30, 40, 50, 60
 	const pairsToRemove = cellsToRemove / 2; // Always even, so pairs work
-	const puzzle = grid.map(row => [...row]);
+	const puzzle = grid.map((row) => [...row]);
 	const removedPositions = new Set<string>();
 	let pairsRemoved = 0;
 
@@ -19,7 +19,10 @@ export function removeNumbers(grid: Grid, difficulty: number): Grid {
 		do {
 			row = Math.floor(Math.random() * 9);
 			col = Math.floor(Math.random() * 9);
-		} while (removedPositions.has(`${row},${col}`) || removedPositions.has(`${8 - row},${8 - col}`));
+		} while (
+			removedPositions.has(`${row},${col}`) ||
+			removedPositions.has(`${8 - row},${8 - col}`)
+		);
 
 		removedPositions.add(`${row},${col}`);
 		removedPositions.add(`${8 - row},${8 - col}`);
