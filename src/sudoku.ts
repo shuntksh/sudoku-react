@@ -7,18 +7,70 @@ export function generateGrid(): Grid {
 }
 
 export function removeNumbers(grid: Grid, difficulty: number): Grid {
-	const cellsToRemove = Math.min(Math.max(20 + (difficulty - 1) * 10, 20), 60); // 20 to 60 cells
-	const puzzle = grid.map((row) => [...row]);
-	let removed = 0;
-	while (removed < cellsToRemove) {
-		const row = Math.floor(Math.random() * 9);
-		const col = Math.floor(Math.random() * 9);
-		if (puzzle[row][col] !== 0) {
-			puzzle[row][col] = 0;
-			removed++;
-		}
+	const cellsToRemove = Math.min(Math.max(20 + (difficulty - 1) * 10, 20), 60); // 20, 30, 40, 50, 60
+	const pairsToRemove = cellsToRemove / 2; // Always even, so pairs work
+	const puzzle = grid.map(row => [...row]);
+	const removedPositions = new Set<string>();
+	let pairsRemoved = 0;
+
+	while (pairsRemoved < pairsToRemove) {
+		let row: number;
+		let col: number;
+		do {
+			row = Math.floor(Math.random() * 9);
+			col = Math.floor(Math.random() * 9);
+		} while (removedPositions.has(`${row},${col}`) || removedPositions.has(`${8 - row},${8 - col}`));
+
+		removedPositions.add(`${row},${col}`);
+		removedPositions.add(`${8 - row},${8 - col}`);
+		puzzle[row][col] = 0;
+		puzzle[8 - row][8 - col] = 0;
+		pairsRemoved++;
 	}
 	return puzzle;
+}
+
+export function isPartialSudokuValid(grid: Grid): boolean {
+	// Check rows
+	for (let row = 0; row < 9; row++) {
+		const seen = new Set<number>();
+		for (let col = 0; col < 9; col++) {
+			const num = grid[row][col];
+			if (num !== 0) {
+				if (seen.has(num)) return false;
+				seen.add(num);
+			}
+		}
+	}
+	// Check columns
+	for (let col = 0; col < 9; col++) {
+		const seen = new Set<number>();
+		for (let row = 0; row < 9; row++) {
+			const num = grid[row][col];
+			if (num !== 0) {
+				if (seen.has(num)) return false;
+				seen.add(num);
+			}
+		}
+	}
+	// Check 3x3 boxes
+	for (let boxRow = 0; boxRow < 3; boxRow++) {
+		for (let boxCol = 0; boxCol < 3; boxCol++) {
+			const seen = new Set<number>();
+			for (let i = 0; i < 3; i++) {
+				for (let j = 0; j < 3; j++) {
+					const row = boxRow * 3 + i;
+					const col = boxCol * 3 + j;
+					const num = grid[row][col];
+					if (num !== 0) {
+						if (seen.has(num)) return false;
+						seen.add(num);
+					}
+				}
+			}
+		}
+	}
+	return true;
 }
 
 export function isSudokuValid(grid: Grid): boolean {

@@ -1,4 +1,4 @@
-import type { Grid } from "../game/sudoku";
+import type { Grid } from "../sudoku";
 import Cell from "./cell";
 
 interface SudokuGridProps {

@@ -4,6 +4,7 @@
 	"private": true,
 	"type": "module",
 	"license": "MIT",
+	"homepage": "https://shuntksh.github.io/sudoku-react",
 	"scripts": {
 		"format": "biome format --write .",
 		"lint": "biome lint --write .",
