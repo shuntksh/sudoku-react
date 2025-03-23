@@ -9,7 +9,7 @@ function Timer({ startTime }: TimerProps) {
 	const minutes = Math.floor(elapsedTime / 60);
 	const seconds = elapsedTime % 60;
 	return (
-		<div className="text-xl font-mono bg-gray-100 p-2 rounded">
+		<div className="font-semibold">
 			{minutes.toString().padStart(2, "0")}:
 			{seconds.toString().padStart(2, "0")}
 		</div>

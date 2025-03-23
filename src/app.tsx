@@ -1,147 +1,137 @@
-import { useEffect, useState } from "react";
-import Controls from "./components/controls";
+import { useState } from "react";
+import ControlSection from "./components/control-buttons";
 import SudokuGrid from "./components/grid";
-import History from "./components/history";
 import NumberPad from "./components/number-pad";
 import Timer from "./components/timer";
-import useLocalStorage from "./hooks/use-local-storage";
-import useSudoku, { type SudokuState } from "./hooks/use-sudoku";
+import useSudoku from "./hooks/use-sudoku";
 import "./styles.css";
 
-interface GameHistoryEntry {
-	date: string;
-	difficulty: number;
-	timeTaken: number;
-}
-
 function App() {
-	const { save, load } = useLocalStorage();
-	const initialState: SudokuState | undefined =
-		load("currentGame") || undefined;
-	const { state, newGame, setCell, selectCell, checkSolution } =
-		useSudoku(initialState);
-	const [menuOpen, setMenuOpen] = useState(false);
-
-	useEffect(() => {
-		const { selectedCell, ...saveState } = state;
-		save("currentGame", saveState);
-	}, [state, save]);
-
-	const handleCheckSolution = () => {
-		if (checkSolution()) {
-			const timeTaken = Math.floor((Date.now() - state.startTime) / 1000);
-			const entry: GameHistoryEntry = {
-				date: new Date().toISOString(),
-				difficulty: state.difficulty,
-				timeTaken,
-			};
-			const history: GameHistoryEntry[] = load("gameHistory") || [];
-			save("gameHistory", [...history, entry]);
-			alert(`Solved! Time taken: ${timeTaken} seconds`);
-			setCell(0, 0, state.grid[0][0]); // Trigger re-render
-		} else {
-			alert("Not solved yet.");
+	const { state, newGame, setCell, selectCell, checkSolution, undo, hint } = useSudoku();
+	const [showModalDifficulty, setShowModalDifficulty] = useState(false);
+	
+	function handleNumberClick(number: number) {
+		if (state.selectedCell) {
+			setCell(state.selectedCell.row, state.selectedCell.col, number);
 		}
-	};
-
+	}
+	
+	function handleClearClick() {
+		if (state.selectedCell) {
+			setCell(state.selectedCell.row, state.selectedCell.col, 0);
+		}
+	}
+	
+	function handleNewGame(difficulty: number) {
+		newGame(difficulty);
+		setShowModalDifficulty(false);
+	}
+	
 	return (
-		<div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
-			{/* Header with Title, Timer, and Hamburger Menu */}
-			<div className="w-full max-w-2xl flex justify-between items-center mb-6">
-				<h1 className="text-4xl font-bold text-blue-500">Sudoku</h1>
-				<div className="flex items-center space-x-4">
+		<div className="min-h-screen bg-white flex flex-col items-center p-4 max-w-md mx-auto">
+			{/* Header */}
+			<h1 className="text-2xl font-bold text-gray-700 mb-4">Sudoku</h1>
+			
+			{/* Game Stats */}
+			<div className="w-full grid grid-cols-4 gap-2 mb-4 text-center font-mono">
+				<div>
+					<div className="text-sm text-gray-500">Difficulty</div>
+					<div className="font-semibold">Medium</div>
+				</div>
+				<div>
+					<div className="text-sm text-gray-500">Mistakes</div>
+					<div className="font-semibold">{state.mistakes}/3</div>
+				</div>
+				<div>
+					<div className="text-sm text-gray-500">Score</div>
+					<div className="font-semibold">{state.score}</div>
+				</div>
+				<div>
+					<div className="text-sm text-gray-500">Time</div>
 					<Timer startTime={state.startTime} />
-					<button
-						className="text-gray-800 focus:outline-none"
-						onClick={() => setMenuOpen(!menuOpen)}
-						type="button"
-					>
-						<svg
-							className="w-8 h-8"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<title>Open Menu</title>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M4 6h16M4 12h16m-7 6h7"
-							/>
-						</svg>
-					</button>
 				</div>
 			</div>
-
-			{/* Hamburger Menu */}
-			<div
-				className={`fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ${
-					menuOpen ? "translate-x-0" : "translate-x-full"
-				} z-50`}
-			>
-				<div className="p-4">
-					<button
-						type="button"
-						className="text-gray-800 mb-4 focus:outline-none"
-						onClick={() => setMenuOpen(false)}
-					>
-						<svg
-							className="w-6 h-6"
-							fill="none"
-							stroke="currentColor"
-							viewBox="0 0 24 24"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<title>Close Menu</title>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M6 18L18 6M6 6l12 12"
-							/>
-						</svg>
-					</button>
-					<Controls onNewGame={newGame} onCheckSolution={handleCheckSolution} />
-					<History />
-				</div>
-			</div>
-
-			{/* Overlay for closing menu on click outside */}
-			{menuOpen && (
-				<div
-					className="fixed inset-0 bg-black bg-opacity-50 z-40"
-					onClick={() => setMenuOpen(false)}
-					onKeyDown={(e) => {
-						if (e.key === "Enter" || e.key === " ") {
-							setMenuOpen(false);
-						}
-					}}
-				/>
-			)}
-
-			{/* Main Content */}
-			<div className="flex flex-col items-center w-full max-w-2xl">
+			
+			{/* Sudoku Grid */}
+			<div className="w-full mb-4">
 				<SudokuGrid
 					grid={state.grid}
 					puzzle={state.puzzle}
 					selectedCell={state.selectedCell}
 					onCellClick={selectCell}
 				/>
-				{state.selectedCell && (
-					<NumberPad
-						onNumberClick={(num) =>
-							state.selectedCell &&
-							setCell(state.selectedCell.row, state.selectedCell.col, num)
-						}
-						onClearClick={() =>
-							state.selectedCell &&
-							setCell(state.selectedCell.row, state.selectedCell.col, 0)
-						}
-					/>
-				)}
 			</div>
+			
+			{/* Control Buttons */}
+			<ControlSection
+				onNewGame={() => setShowModalDifficulty(true)}
+				onUndo={undo}
+				onErase={handleClearClick}
+				onHint={() => hint()}
+			/>
+			
+			{/* Number Pad */}
+			<NumberPad 
+				onNumberClick={handleNumberClick} 
+				onClearClick={handleClearClick} 
+			/>
+			
+			{/* Difficulty Modal */}
+			{showModalDifficulty && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+					<div className="bg-white p-6 rounded-lg shadow-lg w-80">
+						<h2 className="text-xl font-bold mb-4">Select Difficulty</h2>
+						<div className="grid grid-cols-1 gap-2">
+							{['Easy', 'Medium', 'Hard', 'Expert', 'Master'].map((level, index) => (
+								<button
+									key={level}
+									type="button"
+									className="py-2 px-4 bg-blue-100 hover:bg-blue-200 rounded text-left"
+									onClick={() => handleNewGame(index + 1)}
+								>
+									{level}
+								</button>
+							))}
+						</div>
+						<button
+							type="button"
+							className="mt-4 w-full py-2 bg-gray-200 hover:bg-gray-300 rounded"
+							onClick={() => setShowModalDifficulty(false)}
+						>
+							Cancel
+						</button>
+					</div>
+				</div>
+			)}
+			
+			{/* Game Completed Modal */}
+			{state.status === "solved" && (
+				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+					<div className="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
+						<h2 className="text-xl font-bold mb-2">Puzzle Solved!</h2>
+						<p className="mb-4">Congratulations! You've completed the puzzle.</p>
+						<div className="grid grid-cols-2 gap-2 mb-4">
+							<div>
+								<div className="text-sm text-gray-500">Score</div>
+								<div className="font-bold text-xl">{state.score}</div>
+							</div>
+							<div>
+								<div className="text-sm text-gray-500">Time</div>
+								<div className="font-bold text-xl">
+									<Timer startTime={state.startTime} />
+								</div>
+							</div>
+						</div>
+						<button
+							type="button"
+							className="w-full py-2 bg-blue-500 text-white hover:bg-blue-600 rounded"
+							onClick={() => setShowModalDifficulty(true)}
+						>
+							New Game
+						</button>
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

@@ -33,7 +33,7 @@ function SudokuGrid({
 	}
 
 	return (
-		<div className="grid grid-cols-9 gap-0 bg-gray-100 p-1 rounded">
+		<div className="grid grid-cols-9 gap-0 p-1 rounded">
 			{cellElements}
 		</div>
 	);

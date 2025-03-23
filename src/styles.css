@@ -1,19 +1,9 @@
 @import "tailwindcss";
 
-/* Custom styles for iOS-like look and feel */
-body {
-	background-color: #f2f2f7;
-}
-
 h1 {
 	color: #007aff;
 }
 
-.grid {
-	background-color: #ffffff;
-	border-radius: 8px;
-	padding: 4px;
-}
 
 .border-gray-300 {
 	border-color: #8e8e93;
